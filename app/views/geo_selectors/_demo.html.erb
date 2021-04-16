@@ -1,0 +1,66 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-6">
+      <form data-controller="geo-selector" class="m-4" style="max-width:600px">
+        <div class="form-group">
+          <%= select_tag :company,
+            options_for_select(companies.prepend("Select a company..."),@company),
+            placeholder: "Select a company...",
+            class: "form-control form-control-lg",
+            data: { reflex: "change->GeoSelectorReflex#select_company" } %>
+        </div>
+
+        <% if @company %>
+        <div class="form-group">
+          <%= select_tag :department,
+            options_for_select(departments(@company).prepend("Select a department..."), @department),
+            placeholder: "Select a department...",
+            class: "form-control form-control-lg",
+            data: { reflex: "change->GeoSelectorReflex#select_department" } %>
+        </div>
+
+        <% if @department %>
+          <div class="form-group">
+            <%= select_tag :employee,
+              options_for_select(employees(@company, @department).prepend("Select a employee..."), @employee),
+              placeholder: "Select a employee...",
+              class: "form-control form-control-lg",
+              data: { reflex: "change->GeoSelectorReflex#select_employee" } %>
+          </div>
+        <% end %>
+      </form>
+    </div>
+
+    <div class="col-lg-6">
+      <% if @employee %>
+        <div class="card" style="width: 18rem;">
+          <%  employee = emp_details(@employee) %>
+            <div class="card-header font-weight-bold">
+            <%= employee.name.titleize %> Details
+            <td><%= link_to 'Edit', edit_employee_path(employee) %></td>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item text-lg-left font-weight-bold"> <%= employee.name.capitalize %></li>
+              <li class="list-group-item text-lg-left"  > <%= employee.dept_name%></li>
+              <li class="list-group-item text-lg-left"><%= employee.emp_number %></li>
+              <li class="list-group-item text-lg-left"><%= employee.emp_details %></li>
+              <li class="list-group-item text-lg-left"><%= employee.address %></li>
+            </ul>
+          
+        </div>
+        <% if @employee == @edit_id %>
+        <li class="editing">
+          <input type="text" class="edit" value="<%= employee.name %>"
+            data-action="keyup->geo_selectors#cancelEdit blur->geo_selectors#cancelEdit"
+            data-reflex="change->GeoSelectorReflex#update" data-id="<%= employee.id %>">
+        </li>
+     
+        <% end %>
+      <% end %>
+      <% end %>
+    </div>
+
+         
+  </div>
+</div>
+

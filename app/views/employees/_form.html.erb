@@ -1,0 +1,49 @@
+<%= form_with(model: employee, local: true) do |form| %>
+  <% if employee.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(employee.errors.count, "error") %> prohibited this employee from being saved:</h2>
+
+      <ul>
+        <% employee.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name , data: { reflex: "change->GeoSelectorReflex#form" }%>
+  </div>
+
+  <div class="field">
+    <%= form.label :company_name %>
+  
+    <%= form.collection_select :company_id, Company.order(:name),:id,:name, include_blank: true %>
+  </div>
+  <div class="field">
+    <%= form.label :dept_name %>
+  
+    <%= form.collection_select :department_id, Department.order(:name),:id,:name, include_blank: true %>
+  </div>
+
+
+  <div class="field">
+    <%= form.label :emp_number %>
+    <%= form.number_field :emp_number , data: { reflex: "change->GeoSelectorReflex#form" }%>
+  </div>
+
+  <div class="field">
+    <%= form.label :emp_details %>
+    <%= form.text_area :emp_details , data: { reflex: "change->GeoSelectorReflex#form" }%>
+  </div>
+
+  <div class="field">
+    <%= form.label :address %>
+    <%= form.text_area :address , data: { reflex: "change->GeoSelectorReflex#form" }%>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
